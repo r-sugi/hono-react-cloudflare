@@ -15,8 +15,8 @@ export function usePosts() {
 	return useQuery({
 		queryKey: ["data"],
 		queryFn: async (): Promise<Array<Data>> => {
-			const result = await apiClient.api.posts.$get();
-			return result.json();
+			const response = await apiClient.api.posts.$get();
+			return response.json();
 		},
 	});
 }
