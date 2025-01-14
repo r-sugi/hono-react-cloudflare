@@ -1,7 +1,3 @@
-//
-// BEGIN
-//
-
 import { Hono } from "hono";
 import {
 	MethodNotAllowedError,
@@ -11,10 +7,12 @@ import {
 } from "@cloudflare/kv-asset-handler";
 import { SSRRender } from "src/entry-server";
 import assetManifest from "__STATIC_CONTENT_MANIFEST";
-// import { cache } from "hono/cache";
-
+import { queue } from "./queue";
+import { queue as queue2 } from "./queue2";
 type Bindings = {
 	__STATIC_CONTENT: KVNamespace;
+	TEST_QUEUE: Queue;
+	TEST_QUEUE2: Queue;
 };
 
 const app = new Hono<{ Bindings: Bindings }>();
@@ -91,7 +89,10 @@ const routes = app
 		),
 	);
 
-export default app;
+export default {
+	fetch: app.fetch,
+	queue: { queue, queue2 },
+};
 
 export type AppType = typeof routes;
 //

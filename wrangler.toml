@@ -9,3 +9,33 @@ bucket = "dist"
 command = "npm run build"
 cwd = "dist"
 watch_dir = "src"
+
+[[queues.producers]]
+queue = "test-queue"
+binding = "test_queue"
+
+[[queues.producers]]
+queue = "test-queue2"
+binding = "test_queue2"
+
+[[queues.consumers]]
+queue = "test-queue"
+# バッチサイズ(メッセージ数)
+max_batch_size = 10
+# バッチタイムアウト(秒) n秒以内にきたメッセージを1バッチとして処理する
+max_batch_timeout = 1
+# リトライ回数
+max_retries = 5
+# デッドレターキュー
+dead_letter_queue = "test-queue-dlq"
+
+[[queues.consumers]]
+queue = "test-queue2"
+# バッチサイズ(メッセージ数)
+max_batch_size = 10
+# バッチタイムアウト(秒) n秒以内にきたメッセージを1バッチとして処理する
+max_batch_timeout = 1
+# リトライ回数
+max_retries = 5
+# デッドレターキュー
+dead_letter_queue = "test-queue2-dlq"
