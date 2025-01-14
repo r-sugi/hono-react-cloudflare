@@ -26,7 +26,14 @@ type Data = {
 	completed: boolean;
 };
 
-app
+const postsApp = new Hono<{ Bindings: Bindings }>().get("/posts", async (c) => {
+	const url = "https://jsonplaceholder.typicode.com/posts";
+	const response = await fetch(url);
+	const result: Data[] = await response.json();
+	return c.json(result);
+});
+
+const routes = app
 	// .get(
 	// 	"*",
 	// 	cache({
@@ -34,12 +41,7 @@ app
 	// 		// cacheControl: "max-age=3600",
 	// 	}),
 	// )
-	.get("/api/posts", async (c) => {
-		const url = "https://jsonplaceholder.typicode.com/posts";
-		const response = await fetch(url);
-		const result: Data[] = await response.json();
-		return c.json(result);
-	})
+	.route("/api", postsApp)
 	.get("/assets/*", async (c) => {
 		try {
 			return await getAssetFromKV(
@@ -91,6 +93,7 @@ app
 
 export default app;
 
+export type AppType = typeof routes;
 //
 // END
 //

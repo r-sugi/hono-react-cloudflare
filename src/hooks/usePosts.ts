@@ -1,28 +1,22 @@
-//
-// BEGIN
-//
-
 import { useQuery } from "@tanstack/react-query";
+import { hc } from "hono/client";
+import type { AppType } from "~/../server";
+
+const apiClient = hc<AppType>("/");
 
 type Data = {
-  userId: number;
-  id: number;
-  title: string;
-  completed: boolean;
+	userId: number;
+	id: number;
+	title: string;
+	completed: boolean;
 };
 
 export function usePosts() {
-  return useQuery({
-    queryKey: ["data"],
-    queryFn: async () => {
-      const url = "/api/posts";
-      const response = await fetch(url);
-      const result: Data[] = await response.json();
-      return result;
-    },
-  });
+	return useQuery({
+		queryKey: ["data"],
+		queryFn: async (): Promise<Array<Data>> => {
+			const result = await apiClient.api.posts.$get();
+			return result.json();
+		},
+	});
 }
-
-//
-// END
-//
